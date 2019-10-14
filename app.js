@@ -36,21 +36,18 @@ app.post("/user_create", (req, res) => {
         return;
       }
       console.log("Inserted a new user with id: ", results.insertedId);
-      res.end();
+      res.sendFile(__dirname + "/public/user_created.html");
+      //   res.end();
     }
   );
 });
 
-function getConnection() {
-  return mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "root",
-    socket: "	/Applications/MAMP/tmp/mysql/mysql.sock",
-    database: "myDataBase"
-  });
-}
+app.post("/user_delete", (req, res) => {
+  console.log("Deleting a user");
+  console.log("This is the ID: " + req.body.delete_user);
+  res.sendFile(__dirname + "/public/user_deleted.html");
+  //   res.end();
+});
 
 app.get("/user/:id", (req, res) => {
   console.log("Fetching user with id: " + req.params.id);
@@ -89,6 +86,17 @@ app.get("/users", (req, res) => {
     res.json(rows);
   });
 });
+
+function getConnection() {
+  return mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "root",
+    socket: "	/Applications/MAMP/tmp/mysql/mysql.sock",
+    database: "myDataBase"
+  });
+}
 
 // localhost:3003
 app.listen(3003, () => {
