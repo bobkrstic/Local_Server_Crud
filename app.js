@@ -94,7 +94,8 @@ app.get("/user/:id", (req, res) => {
 // main route landing page
 app.get("/", (req, res) => {
   console.log("Responding to root route");
-  res.send("Hello from Root");
+  //   res.send("Hello from Root");
+  res.sendFile(__dirname + "/public/landing_page.html");
 });
 
 // getting all the users (all rows from the database table)
