@@ -129,10 +129,17 @@ app.get("/user/:id", (req, res) => {
       rows[0].id + " " + rows[0].first_name + " " + rows[0].last_name
     );
 
+    const userID = rows[0].id;
+
+    res.render("test", {
+      userId: userID,
+      userName: rows[0].first_name,
+      userLastName: rows[0].last_name
+    });
+
     // console.log(RowDataPacket);
     // res.json(rows);
     // console.log(rows);
-    res.render("test");
   });
 });
 
