@@ -45,7 +45,22 @@ app.post("/user_create", (req, res) => {
 app.post("/user_delete", (req, res) => {
   console.log("Deleting a user");
   console.log("This is the ID: " + req.body.delete_user);
+
+  const userID = req.body.delete_user;
+
+  const queryString = "DELETE FROM users WHERE id = ?";
+
+  getConnection().query(queryString, [userID], (err, rows, fields) => {
+    console.log("I think we deleted user successfully");
+    if (err) {
+      console.log("Failed to query for users: " + err);
+      res.sendStatus(500);
+      return;
+    }
+    console.log("User Deleted");
+  });
   res.sendFile(__dirname + "/public/user_deleted.html");
+
   //   res.end();
 });
 
