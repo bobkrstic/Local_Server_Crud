@@ -1,20 +1,44 @@
 // load our app server using express
 var express = require("express");
+var http = require("http");
 const app = express();
 const morgan = require("morgan");
 var mysql = require("mysql");
-
-// npm i body-parser
 const bodyParser = require("body-parser");
 // to make sure app uses body-parser
 // helps process the request easier
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // our application server is now going to able to serve all of the files
 // inside the "public"
 app.use(express.static("./public"));
 
 app.use(morgan("short"));
+
+var dateFormat = require("dateformat");
+var now = new Date();
+
+// the view engine Template parsing, using EJS types
+
+app.set("view engine", "ejs");
+
+// using the bootstrap
+app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js"));
+app.use("/js", express.static(__dirname + "/node_modules/tether/dist/js"));
+app.use("/js", express.static(__dirname + "/node_modules/jquery/dist"));
+app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"));
+
+// create connection
+function getConnection() {
+  return mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "root",
+    socket: "	/Applications/MAMP/tmp/mysql/mysql.sock",
+    database: "myDataBase"
+  });
+}
 
 app.post("/user_create", (req, res) => {
   console.log("Trying to create a new user...");
@@ -44,9 +68,9 @@ app.post("/user_create", (req, res) => {
 
 app.post("/user_delete", (req, res) => {
   console.log("Deleting a user");
-  console.log("This is the ID: " + req.body.delete_user);
+  console.log("This is the ID: " + req.body.delete_user_id);
 
-  const userID = req.body.delete_user;
+  const userID = req.body.delete_user_id;
 
   const queryString = "DELETE FROM users WHERE id = ?";
 
@@ -64,11 +88,34 @@ app.post("/user_delete", (req, res) => {
   //   res.end();
 });
 
-app.get("/user/:id", (req, res) => {
-  console.log("Fetching user with id: " + req.params.id);
+// app.get("/user/:id", (req, res) => {
+//   console.log("Fetching user with id: " + req.params.id);
 
-  const userId = req.params.id;
+//   const userId = req.params.id;
+//   const queryString = "SELECT * FROM users WHERE id = ?";
+
+//   getConnection().query(queryString, [userId], (err, rows, fields) => {
+//     console.log("I think we fetched users successfully");
+//     if (err) {
+//       console.log("Failed to query for users: " + err);
+//       res.sendStatus(500);
+//       return;
+//     }
+//     console.log("Connected");
+//     console.log(rows);
+//     res.json(rows);
+//     // res.render()
+//   });
+// });
+
+app.get("/user/:id", (req, res) => {
+  console.log("Fetching user with id: " + req.query.get_user_id);
+  //   console.log(req);
+
+  const userId = req.query.get_user_id;
   const queryString = "SELECT * FROM users WHERE id = ?";
+
+  console.log(queryString + " " + userId);
 
   getConnection().query(queryString, [userId], (err, rows, fields) => {
     console.log("I think we fetched users successfully");
@@ -78,7 +125,14 @@ app.get("/user/:id", (req, res) => {
       return;
     }
     console.log("Connected");
-    res.json(rows);
+    console.log(
+      rows[0].id + " " + rows[0].first_name + " " + rows[0].last_name
+    );
+
+    // console.log(RowDataPacket);
+    // res.json(rows);
+    // console.log(rows);
+    res.render("test");
   });
 });
 
@@ -101,17 +155,6 @@ app.get("/users", (req, res) => {
     res.json(rows);
   });
 });
-
-function getConnection() {
-  return mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "root",
-    socket: "	/Applications/MAMP/tmp/mysql/mysql.sock",
-    database: "myDataBase"
-  });
-}
 
 // localhost:3003
 app.listen(3003, () => {

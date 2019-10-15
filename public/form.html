@@ -10,8 +10,13 @@
       </form>
       <hr />
       <form action="/user_delete" method="POST">
-        <input placeholder="User ID" name="delete_user" />
+        <input placeholder="User ID" name="delete_user_id" />
         <button>Delete</button>
+      </form>
+      <hr />
+      <form action="/user/:id" method="GET">
+        <input placeholder="User ID" name="get_user_id" />
+        <button>Get User</button>
       </form>
       <hr />
     </div>
