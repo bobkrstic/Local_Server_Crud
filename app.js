@@ -101,9 +101,11 @@ app.get("/user/delete/:id", (req, res) => {
   getConnection().query(
     "DELETE FROM users WHERE id = " + userId + "",
     (err, rows, fields) => {
-      res.render("/public/form.html");
+      console.log("User deleted");
+      //   res.render("/public/form.html");
     }
   );
+  res.sendFile(__dirname + "/public/form.html");
 });
 
 // app.get("/user/:id", (req, res) => {
