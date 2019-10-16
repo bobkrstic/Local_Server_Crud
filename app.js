@@ -95,6 +95,17 @@ app.post("/user_delete", (req, res) => {
   //   res.end();
 });
 
+// another way DELETING a row
+app.get("/user/delete/:id", (req, res) => {
+  const userId = req.params.id;
+  getConnection().query(
+    "DELETE FROM users WHERE id = " + userId + "",
+    (err, rows, fields) => {
+      res.render("/public/form.html");
+    }
+  );
+});
+
 // app.get("/user/:id", (req, res) => {
 //   console.log("Fetching user with id: " + req.params.id);
 
