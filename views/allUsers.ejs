@@ -1,0 +1,24 @@
+<table style="width:40%">
+  <tr>
+    <th>ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+  </tr>
+  <% users.forEach(function(user, index){ %>
+  <tr>
+    <td><%= user.id%></td>
+    <td><%= user.first_name%></td>
+    <td><%= user.last_name%></td>
+    <td>
+      <a href="/event/delete/<%= user.id%>">Delete</a>
+      <a href="/event/edit/<%= user.id%>">Edit</a>
+    </td>
+  </tr>
+  <% }); %>
+</table>
+
+<hr />
+<form action="/form.html">
+  <input type="submit" value="Back to the beginning" />
+</form>
+<hr />

@@ -59,9 +59,16 @@ app.post("/user_create", (req, res) => {
         res.sendStatus(500);
         return;
       }
-      console.log("Inserted a new user with id: ", results.insertedId);
-      res.sendFile(__dirname + "/public/user_created.html");
-      //   res.end();
+      userID = results.insertId;
+      console.log("Inserted a new user with id: ", results.insertId);
+      //   res.sendFile(__dirname + "/public/user_created.html");
+      res.render("userCreated", {
+        userUiID: userID,
+        userFirstName: firstName,
+        userLastName: lastName
+        //   console.log(firstName + "  " + lastName);
+        //   res.end()
+      });
     }
   );
 });
@@ -159,7 +166,13 @@ app.get("/users", (req, res) => {
       res.sendStatus(500);
       return;
     }
-    res.json(rows);
+    // res.json(rows);
+    res.render("allUsers", {
+      users: rows
+      //   userId: rows[0].id,
+      //   userName: rows[0].first_name,
+      //   userLastName: rows[0].last_name
+    });
   });
 });
 
