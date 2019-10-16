@@ -138,6 +138,7 @@ app.get("/user/:id", (req, res) => {
 
     const userID = rows[0].id;
 
+    // on "/user/:id" route render this page "test.ejs"
     res.render("test", {
       userId: userID,
       userName: rows[0].first_name,
