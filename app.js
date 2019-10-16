@@ -90,7 +90,7 @@ app.post("/user_delete", (req, res) => {
     }
     console.log("User Deleted");
   });
-  res.sendFile(__dirname + "/public/user_deleted.html");
+  //   res.sendFile(__dirname + "/public/user_deleted.html");
 
   //   res.end();
 });
@@ -101,11 +101,10 @@ app.get("/user/delete/:id", (req, res) => {
   getConnection().query(
     "DELETE FROM users WHERE id = " + userId + "",
     (err, rows, fields) => {
-      console.log("User deleted");
-      //   res.render("/public/form.html");
+      res.render("pages/deletedUser", {});
     }
   );
-  res.sendFile(__dirname + "/public/form.html");
+  //   res.sendFile(__dirname + "/public/form.html");
 });
 
 // app.get("/user/:id", (req, res) => {
