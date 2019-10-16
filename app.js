@@ -151,6 +151,61 @@ app.get("/user/:id", (req, res) => {
   });
 });
 
+// get the chosen user and display the data in the form
+// this data will be edited and submitted in the POST method below
+app.get("/user/edit/:id", (req, res) => {
+  //   console.log("Fetching user with id: " + req.query.get_user_id);
+  //   const userId = req.query.get_user_id;
+  const userId = req.params.id;
+  const queryString = "SELECT * FROM users WHERE id = ?";
+
+  console.log(queryString + " " + userId);
+
+  getConnection().query(queryString, [userId], (err, rows, fields) => {
+    const userID = rows[0].id;
+
+    // on "/user/:id" route render this page "test.ejs"
+    res.render("pages/updateUser.ejs", {
+      userId: userID,
+      userName: rows[0].first_name,
+      userLastName: rows[0].last_name
+    });
+  });
+});
+
+app.post("/user/edit/:id", (req, res) => {
+  console.log("Trying to update a user with user id = " + req.params.id);
+  console.log(req.params.id);
+  console.log("First name: " + req.body.userName);
+  // capturing input from a user
+
+  const userId = req.params.id;
+  const firstName = req.body.userName;
+  const lastName = req.body.userLastName;
+
+  // first_name last_name the way they are defined in the data base
+  const queryString =
+    "UPDATE users SET first_name = ?, last_name = ? WHERE id = " + userId + "";
+  // next step is the sequel query to use the input data and place it into the table (data base)
+  getConnection().query(
+    queryString,
+    [firstName, lastName],
+    (err, results, fields) => {
+      if (err) {
+        console.log("Failed to update user: " + err);
+        res.sendStatus(500);
+        return;
+      }
+
+      console.log("Edited a new user with id: " + req.body.userId);
+      res.sendFile(__dirname + "/public/form.html");
+      //   if (results.affectedRows) {
+      //     res.redirect(baseURL);
+      //   }
+    }
+  );
+});
+
 // main route landing page
 app.get("/", (req, res) => {
   console.log("Responding to root route");
